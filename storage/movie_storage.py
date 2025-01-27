@@ -1,5 +1,5 @@
 import json
-json_file_path = "movie_data.json"
+json_file_path = "../data/movie_data.json"
 
 
 def get_movies_storage():

@@ -1,10 +1,10 @@
 import random
 import statistics as st
 import matplotlib.pyplot as plt
-import movie_storage as movs
+from storage import movie_storage as movs
 import os
 import dotenv
-from storage_csv import StorageCsv
+from storage.storage_csv import StorageCsv
 import requests
 
 dotenv.load_dotenv()
@@ -18,7 +18,7 @@ HEADERS = {
 class MovieApp:
 
 
-    def __init__(self, storage = StorageCsv("movies.csv")):
+    def __init__(self, storage = StorageCsv("data/movies.csv")):
         self._storage = storage
 
 
@@ -235,7 +235,7 @@ class MovieApp:
         """Generates a website for the movie collection."""
         try:
             # Read the template
-            with open("index_template.html", "r", encoding="utf-8") as file:
+            with open("templates/index_template.html", "r", encoding="utf-8") as file:
                 template_content = file.read()
 
             # Replace placeholders
@@ -244,7 +244,7 @@ class MovieApp:
                                                       self._storage.generate_movies_html())
 
             # Write the final HTML
-            with open("index.html", "w", encoding="utf-8") as file:
+            with open("data/index.html", "w", encoding="utf-8") as file:
                 file.write(updated_content)
 
             print("Website generated successfully: index.html")

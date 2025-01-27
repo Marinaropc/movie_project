@@ -1,6 +1,5 @@
-index.html
+data/index.html
 movie.py
-movie_data.json
-storage_json.py
+data/movie_data.json
+storage/storage_json.py
 .env
-test.py
