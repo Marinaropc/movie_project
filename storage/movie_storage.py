@@ -1,5 +1,8 @@
+import os
 import json
-json_file_path = "../data/movie_data.json"
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+json_file_path = os.path.join(current_dir, '..', 'data', 'movie_data.json')
 
 
 def get_movies_storage():

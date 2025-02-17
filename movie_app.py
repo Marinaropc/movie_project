@@ -1,7 +1,6 @@
 import random
 import statistics as st
 import matplotlib.pyplot as plt
-from storage import movie_storage as movs
 import os
 import dotenv
 from storage.storage_csv import StorageCsv
@@ -33,7 +32,7 @@ class MovieApp:
         rating_values = []
         amount_of_movies = 0
         movie_names = []
-        movie_names_lowercase = []  # for easier searching and deletion
+        movie_names_lowercase = []
         movie_years = []
         for movie_name, movie_info in movies.items():
             amount_of_movies += 1
@@ -128,7 +127,7 @@ class MovieApp:
                 print("Please enter a movie name")
                 return
             if movie_name.lower() == movie_to_delete.lower():
-                movs.delete_movie_storage(movie_name)
+                self._storage.delete_movie(movie_name)
                 print('Movie deleted successfully')
                 return
         print("Movie not found")
@@ -143,12 +142,12 @@ class MovieApp:
                 try:
                     rating_to_update = float(input("Enter new movie rating between 0 and 10: "))
                 except ValueError:
-                    print("Expected a positive integer.")
+                    print("Expected a positive integer or float.")
                     return
                 if rating_to_update < 0 or rating_to_update > 10:
                     print("Rating must be between 0 and 10")
                     return
-                movs.update_movie_storage(movie_name, rating_to_update)
+                self._storage.update_movie(movie_name, rating_to_update)
                 print('Movie updated successfully')
                 return
         else:
@@ -253,6 +252,7 @@ class MovieApp:
         except Exception as e:
             print(f"An error occurred: {e}")
 
+
     def _menu_user_input(self):
         """ Menu displayed to user """
         menu = ('Menu:\n0. Exit.\n1. List movies.\n2. Add movie.\n3. Delete movie.'
@@ -261,7 +261,7 @@ class MovieApp:
         print(menu)
 
         try:
-            action = int(input("Enter choice (0-9):"))
+            action = int(input("Enter choice (0-10):"))
             if action in range(0, 11):
                 return action
             else:

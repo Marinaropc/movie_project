@@ -3,11 +3,14 @@ import csv
 
 
 class StorageCsv(IStorage):
+
+
     def __init__(self, file_path):
         """
         Initializes the storage with the file path
         """
         self.file_path = file_path
+
 
     def list_movies(self):
         """Reads file and returns a dictionary of movies"""
@@ -15,10 +18,8 @@ class StorageCsv(IStorage):
         try:
             with open(self.file_path, 'r', encoding="utf-8") as fileobj:
                 reader = csv.DictReader(fileobj)
-
-                # Check if the file has no rows
                 if reader.fieldnames is None:
-                    print("CSV file is empty or has no header!")  # Debugging
+                    print("CSV file is empty or has no header!")
                     return {}
 
                 for row in reader:
@@ -28,19 +29,21 @@ class StorageCsv(IStorage):
 
                         movies[title] = {
                             'year': int(row['year']) if row['year'].isdigit() else 0,
-                            'rating': float(row['rating']) if row['rating'].replace('.', '', 1).isdigit() else 0.0,
+                            'rating': float(row['rating']) if row['rating'].replace(
+                                '.', '', 1).isdigit() else 0.0,
                             'poster': row.get('poster', '')
                         }
                     else:
-                        print(f"Malformed row: {row}")  # Debugging
+                        print(f"Malformed row: {row}")
         except FileNotFoundError:
-            print("File not found!")  # Debugging
+            print("File not found!")
             return {}
         except Exception as e:
-            print(f"Unexpected error: {e}")  # Debugging for other issues
+            print(f"Unexpected error: {e}")
             return {}
 
         return movies
+
 
     def save_movies_storage(self, movie_dict):
         """Saves a dictionary of movies to the file"""
@@ -53,8 +56,9 @@ class StorageCsv(IStorage):
                     'title': title,
                     'year': details['year'],
                     'rating': details['rating'],
-                    'poster': details.get('poster', '')  # Handle missing poster
+                    'poster': details.get('poster', '')
                 })
+
 
     def add_movie(self, title, year, rating, poster=""):
         """Adds a movie to the file"""
@@ -66,12 +70,14 @@ class StorageCsv(IStorage):
         }
         self.save_movies_storage(movies_dict)
 
+
     def delete_movie(self, title):
         """Deletes a movie from the file"""
         movies_dict = self.list_movies()
         if title in movies_dict:
             del movies_dict[title]
             self.save_movies_storage(movies_dict)
+
 
     def update_movie(self, title, rating):
         """Updates a movie's rating in the file"""
@@ -80,9 +86,10 @@ class StorageCsv(IStorage):
             movies_dict[title]["rating"] = float(rating)
             self.save_movies_storage(movies_dict)
 
+
     def generate_movies_html(self):
         """Generates HTML content for the movie grid."""
-        movies = self.list_movies()  # Get the dictionary of movies
+        movies = self.list_movies()
         movie_html = ""
 
         for title, details in movies.items():
@@ -90,7 +97,6 @@ class StorageCsv(IStorage):
             rating = details["rating"]
             poster_url = details.get("poster", "")
 
-            # Construct the HTML for each movie
             movie_html += f"""
                 <li>
                     <div class="movie">
